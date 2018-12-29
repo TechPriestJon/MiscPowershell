@@ -193,6 +193,38 @@ $testFunction = "Function Test
 
 Invoke-Expression $testFunction;
 
+$openFunction = "Function Open 
+    ([Parameter(Mandatory=`$false)] [RepoFolders]`$targetFolder){
+        if(`$targetFolder -eq `$null) { 
+            try { 
+                Invoke-Expression (`"Invoke-Expression Open`" + `$global:currentProject) 
+            } 
+            catch { 
+                Invoke-Expression `"Write-Host -ForegroundColor Red ```"Project```" `$global:currentProject```" Does Not Have Open Function```" `" 
+            } 
+        } 
+        else {
+            Switch(`$targetFolder){ 
+                `"All`" { 
+                    Write-Host -ForegroundColor Red `"Cannot Open All, Please Select A Project`"; 
+                }"
+                ForEach ($repoFolder in $repoFolders) {
+                    $openFunction = $openFunction + "`"" + $repoFolder.Name + "`" { 
+                        try { 
+                            Invoke-Expression Open" + $repoFolder.Name + " 
+                        } 
+                        catch { 
+                            Write-Host -ForegroundColor Red `"Project " + $repoFolder.Name + " Does Not Have Open Function`" 
+                        } 
+                    }"        
+                }
+                $openFunction = $openFunction + 
+            "} 
+        } 
+    }";
+
+Invoke-Expression $openFunction;
+
 Write-Host -ForegroundColor Green "Powershell Init Complete";
 
 GoToDrive;
